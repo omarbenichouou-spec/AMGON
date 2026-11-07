@@ -1,0 +1,54 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# En local : lancer `npm run dev` et `npm run cms`, puis ouvrir /admin/.
+local_backend: true
+
+# Les modifications passent par une proposition éditoriale avant publication.
+publish_mode: editorial_workflow
+media_folder: "public/images/articles"
+public_folder: "/images/articles"
+site_url: "/"
+locale: "fr"
+
+collections:
+  - name: "articles"
+    label: "Articles du blog"
+    label_singular: "Article"
+    folder: "content/articles"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields: ["publishedAt", "title"]
+    view_filters:
+      - label: "Brouillons"
+        field: draft
+        pattern: true
+      - label: "Articles publiés"
+        field: draft
+        pattern: false
+    fields:
+      - { label: "Titre H1", name: "title", widget: "string", hint: "Titre descriptif et naturel, sans accumulation de mots-clés." }
+      - { label: "Titre SEO", name: "metaTitle", widget: "string", required: true }
+      - { label: "Meta description", name: "metaDescription", widget: "text", required: true }
+      - { label: "Résumé", name: "excerpt", widget: "text", required: true }
+      - label: "Catégorie"
+        name: "category"
+        widget: "select"
+        options: ["Maintenance", "Dépannage", "Installation", "Sécurité", "Conseils pratiques"]
+      - { label: "Image", name: "image", widget: "image", required: true }
+      - { label: "Texte alternatif de l’image", name: "imageAlt", widget: "string", required: true }
+      - { label: "Date de publication", name: "publishedAt", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Date de mise à jour (facultative)", name: "updatedAt", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
+      - { label: "Brouillon", name: "draft", widget: "boolean", default: true, hint: "Conserver activé pendant la rédaction et la relecture." }
+      - { label: "Mettre en avant", name: "featured", widget: "boolean", default: false, required: false }
+      - label: "Articles liés (slugs)"
+        name: "related"
+        widget: "list"
+        required: false
+        default: []
+        hint: "Ajoutez un slug par élément, par exemple : maintenance-reguliere-ascenseur"
+      - { label: "Contenu", name: "body", widget: "markdown", required: true }
